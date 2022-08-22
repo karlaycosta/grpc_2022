@@ -1,0 +1,14 @@
+name: grpc_2022
+description: Exemplo cliente e servidor gRPC.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.17.6 <3.0.0'
+
+dependencies:
+  protobuf: ^2.1.0
+  grpc: ^3.0.2
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0

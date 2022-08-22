@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+service Mensagem {
+    rpc Enviar (Msg) returns (Msg);
+    rpc Receber (Msg) returns (stream Msg);
+}
+
+// Estrutura de dados
+message Msg {
+    string mensagem = 1;
+    int32 numero = 2;
+}
