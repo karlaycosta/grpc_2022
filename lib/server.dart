@@ -1,21 +1,34 @@
 import 'package:grpc/grpc.dart';
+import 'package:grpc_2022/generated/server.pbgrpc.dart';
 
-import 'generated/mensagem.pbgrpc.dart';
-
-class MensagemService extends MensagemServiceBase {
-  int _count = 0;
+class ServerService extends ServerServiceBase {
   @override
-  Future<Msg> enviar(ServiceCall call, Msg request) async {
-    print('Requisição[enviar]: ${request.mensagem}');
-    return Msg(mensagem: 'Echo: ${request.mensagem}', numero: ++_count);
-  }
-
-  @override
-  Stream<Msg> receber(ServiceCall call, Msg request) async* {
-    print('Requisição[receber]: ${request.mensagem}');
-    for (var i = 0; i < 10; i++) {
-      await Future.delayed(const Duration(seconds: 5));
-      yield Msg(mensagem: 'Número: $i');
+  Stream<Msg> connection(ServiceCall call, Stream<Msg> request) async* {
+    try {
+      await for (final msg in request) {
+        print(msg.body);
+        yield Msg(body: 'OK', header: 'Server');
+      }
+    } on GrpcError catch (e) {
+      print('[ERROR] - $e');
     }
   }
+}
+
+class PeerService extends PeerServiceBase {
+  @override
+  Stream<Msg> connection(ServiceCall call, Stream<Msg> request) async* {
+    try {
+      await for (final msg in request) {
+        print(msg.body);
+        yield Msg(body: 'OK', header: 'Server');
+      }
+    } on GrpcError catch (e) {
+      print('[ERROR] - ${e.codeName}');
+    }
+  }
+
+  /// Função para saber se o sevidor está online.
+  @override
+  Future<Null> ping(ServiceCall call, Null request) async => request;
 }

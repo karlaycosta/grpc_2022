@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+// Serviços expostos para os servidores
+service Server {
+    rpc connection (stream Msg) returns (stream Msg);
+}
+
+// Serviços expostos para o cliente
+service Peer {
+    rpc connection (stream Msg) returns (stream Msg);
+    rpc ping(Null) returns (Null);
+}
+
+// Estrutura de dados da mensagem
+message Msg {
+    string header = 1;
+    string body = 2;
+}
+
+// Estrutura de dados nula
+message Null {}
